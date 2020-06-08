@@ -53,6 +53,19 @@ const renderInput = function (onChange, focusCondition, className) {
     return input
 }
 
+const renderButton = function (label, onClick, className) {
+    const button = document.createElement('button')
+    button.className = className
+
+    if (onClick) {
+        button.addEventListener('click', onClick)
+    }
+
+    button.innerText = label
+
+    return button
+}
+
 // State changing functions
 
 const onNewToDoNameChange = function (event) {
@@ -87,22 +100,41 @@ const onTaskCompleteToggle = function (indexToToggle) {
     update()
 }
 
+const onTaskDelete = function (indexToDelete) {
+    tasks = tasks.filter(function (task, index) {
+        return index !== indexToDelete
+    })
+
+    update()
+}
+
 // Rendering
 
-const renderTask = function (task, onClick) {
+const renderTask = function (task, onTaskToggle, onDelete) {
     const container = document.createElement('li')
+    const wrapper = document.createElement('div')
+    const textContainer = document.createElement('span')
+ 
     container.className = 'todo-list__list-item'
-
-    container.addEventListener(
-        'click',
-        onClick
-    )
-
+    wrapper.className = 'todo-list__list-item-wrapper'
+    textContainer.className = 'todo-list__list-item-text-container'
     if (task.isCompleted) {
         container.className = container.className + ' todo-list__list-item--completed'
     }
 
-    container.innerText = task.name
+    const deleteButton = renderButton(
+        'X',
+        onDelete,
+        'todo-list__button todo-list__button--delete'
+    )
+    container.addEventListener('click', onTaskToggle)
+
+    const text = document.createTextNode(task.name)
+
+    textContainer.appendChild(text)
+    wrapper.appendChild(textContainer)
+    wrapper.appendChild(deleteButton)
+    container.appendChild(wrapper)
 
     return container
 }
@@ -112,7 +144,11 @@ const renderTasksList = function (tasks) {
     container.className = 'todo-list__list'
 
     const tasksElements = tasks.map(function (task, index) {
-        return renderTask(task, function () { onTaskCompleteToggle(index) })
+        return renderTask(
+            task,
+            function () { onTaskCompleteToggle(index) },
+            function () { onTaskDelete(index) },
+        )
     })
 
     appendArray(tasksElements, container)
@@ -121,12 +157,7 @@ const renderTasksList = function (tasks) {
 }
 
 const renderNewTaskButton = function (label) {
-    const button = document.createElement('button')
-    button.className = 'todo-list__button'
-
-    button.innerText = label
-
-    return button
+    return renderButton(label, null, 'todo-list__button')
 }
 
 const renderNewTaskInput = function () {
