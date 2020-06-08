@@ -11,6 +11,10 @@ let newToDoInputIsFocused = false
 let tasks = [
     {
         name: 'Wynieś śmieci',
+        isCompleted: true,
+    },
+    {
+        name: 'Zmyj naczynia',
         isCompleted: false,
     }
 ]
@@ -24,6 +28,10 @@ const appendArray = function (array, container) {
 const renderTask = function(task){
     const container  = document.createElement('div')
     container.className = 'todo-list__list-item'
+
+    if(task.isCompleted){
+        container.className = container.className + ' todo-list__list-item--completed'
+    }
 
     container.innerText = task.name
 
