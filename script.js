@@ -21,8 +21,37 @@ const appendArray = function (array, container) {
     })
 }
 
+const renderTask = function(task){
+    const container  = document.createElement('div')
+    container.className = 'todo-list__list-item'
+
+    container.innerText = task.name
+
+    return container
+}
+
+const renderTasksList = function(tasks){
+    const container  = document.createElement('div')
+    container.className = 'todo-list__list'
+
+    const tasksElements = tasks.map((task) => {
+        return renderTask(task)
+    })
+
+    appendArray(tasksElements, container)
+
+    return container
+}
+
 const render = function() {
-    return document.createTextNode('Ala ma kota')
+    const container  = document.createElement('div')
+    container.className = 'todo-list'
+
+    const taskListElement = renderTasksList(tasks)
+
+    container.appendChild(taskListElement)
+
+    return container
 }
 
 const init = function(selector){
