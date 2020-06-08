@@ -1,3 +1,10 @@
+.todo-list__filters{
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 16px;
+}
+
 .todo-list__form {
     display: flex;
 }
@@ -29,6 +36,14 @@
     background-color: #c0392b;
 }
 
+.todo-list__button--filter {
+    width: 30%;
+}
+
+.todo-list__button--filter-active {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
 .todo-list__button:hover {
     background-color: rgba(0, 0, 0, 0.05);
 }
@@ -43,11 +58,11 @@
     font-size: 14px;
 }
 
-.todo-list__list-item-wrapper{
+.todo-list__list-item-wrapper {
     display: flex;
     justify-content: space-between;
 }
 
-.todo-list__list-item--completed .todo-list__list-item-text-container{
+.todo-list__list-item--completed .todo-list__list-item-text-container {
     text-decoration: line-through;
 }

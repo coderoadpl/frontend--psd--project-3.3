@@ -78,6 +78,12 @@ const filterByCompleted = function (task) {
     return true
 }
 
+const onFilterChange = function (filterValue) {
+    filter = filterValue
+
+    update()
+}
+
 const onNewToDoNameChange = function (event) {
     newToDoInputIsFocused = true
     newToDoName = event.target.value
@@ -193,6 +199,34 @@ const renderNewTaskForm = function () {
     return container
 }
 
+const renderFilterButton = function (filterValue, activeFilter) {
+    let className = 'todo-list__button todo-list__button--filter'
+    if (filterValue === activeFilter) {
+        className = className + ' todo-list__button--filter-active'
+    }
+
+    return renderButton(
+        filterValue,
+        function () { onFilterChange(filterValue) },
+        className
+    )
+}
+
+const renderFilters = function (activeFilter) {
+    const container = document.createElement('div')
+    container.className = 'todo-list__filters'
+
+    const buttonAll = renderFilterButton('ALL', activeFilter)
+    const buttonDone = renderFilterButton('DONE', activeFilter)
+    const buttonNotDone = renderFilterButton('NOT-DONE', activeFilter)
+
+    container.appendChild(buttonAll)
+    container.appendChild(buttonDone)
+    container.appendChild(buttonNotDone)
+
+    return container
+}
+
 const render = function () {
     const container = document.createElement('div')
     container.className = 'todo-list'
@@ -200,9 +234,11 @@ const render = function () {
     const filteredTasks = tasks
         .filter(filterByCompleted)
 
+    const filtersElement = renderFilters(filter)
     const newTaskFormElement = renderNewTaskForm()
     const taskListElement = renderTasksList(filteredTasks)
 
+    container.appendChild(filtersElement)
     container.appendChild(newTaskFormElement)
     container.appendChild(taskListElement)
 
