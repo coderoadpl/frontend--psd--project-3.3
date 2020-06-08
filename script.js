@@ -68,6 +68,16 @@ const renderButton = function (label, onClick, className) {
 
 // State changing functions
 
+const filterByCompleted = function (task) {
+    if (filter === 'ALL') return true
+
+    if (filter === 'DONE') return task.isCompleted
+
+    if (filter === 'NOT-DONE') return !task.isCompleted
+
+    return true
+}
+
 const onNewToDoNameChange = function (event) {
     newToDoInputIsFocused = true
     newToDoName = event.target.value
@@ -114,7 +124,7 @@ const renderTask = function (task, onTaskToggle, onDelete) {
     const container = document.createElement('li')
     const wrapper = document.createElement('div')
     const textContainer = document.createElement('span')
- 
+
     container.className = 'todo-list__list-item'
     wrapper.className = 'todo-list__list-item-wrapper'
     textContainer.className = 'todo-list__list-item-text-container'
@@ -187,8 +197,11 @@ const render = function () {
     const container = document.createElement('div')
     container.className = 'todo-list'
 
+    const filteredTasks = tasks
+        .filter(filterByCompleted)
+
     const newTaskFormElement = renderNewTaskForm()
-    const taskListElement = renderTasksList(tasks)
+    const taskListElement = renderTasksList(filteredTasks)
 
     container.appendChild(newTaskFormElement)
     container.appendChild(taskListElement)
