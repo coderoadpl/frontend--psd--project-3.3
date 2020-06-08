@@ -1,3 +1,5 @@
+// App state
+
 let mainContainer = null
 
 let filter = 'ALL' // one of ALL, DONE, NOT-DONE
@@ -5,7 +7,7 @@ let sort = 'ASCENDING' // ASCENDING or DESCENDING
 
 let searchPhrase = ''
 let searchInputIsFocused = false
-let newToDoName = 'dadsa'
+let newToDoName = ''
 let newToDoInputIsFocused = false
 
 let tasks = [
@@ -19,7 +21,7 @@ let tasks = [
     }
 ]
 
-// --------
+// Generic / helper functions
 
 const focus = function (condition, element) {
     if (condition) {
@@ -51,7 +53,7 @@ const renderInput = function (onChange, focusCondition, className) {
     return input
 }
 
-// --------
+// State changing functions
 
 const onNewToDoNameChange = function (event) {
     newToDoInputIsFocused = true
@@ -72,11 +74,29 @@ const onNewToDoSubmit = function (event) {
     update()
 }
 
-// --------
+const onTaskCompleteToggle = function (indexToToggle) {
+    tasks = tasks.map(function (task, index) {
+        if (index !== indexToToggle) return task
 
-const renderTask = function (task) {
+        return {
+            name: task.name,
+            isCompleted: !task.isCompleted,
+        }
+    })
+
+    update()
+}
+
+// Rendering
+
+const renderTask = function (task, onClick) {
     const container = document.createElement('li')
     container.className = 'todo-list__list-item'
+
+    container.addEventListener(
+        'click',
+        onClick
+    )
 
     if (task.isCompleted) {
         container.className = container.className + ' todo-list__list-item--completed'
@@ -91,8 +111,8 @@ const renderTasksList = function (tasks) {
     const container = document.createElement('ol')
     container.className = 'todo-list__list'
 
-    const tasksElements = tasks.map((task) => {
-        return renderTask(task)
+    const tasksElements = tasks.map(function (task, index) {
+        return renderTask(task, function () { onTaskCompleteToggle(index) })
     })
 
     appendArray(tasksElements, container)
@@ -109,7 +129,7 @@ const renderNewTaskButton = function (label) {
     return button
 }
 
-const renderNewTaskInput = function(){
+const renderNewTaskInput = function () {
     return renderInput(
         onNewToDoNameChange,
         newToDoInputIsFocused,
