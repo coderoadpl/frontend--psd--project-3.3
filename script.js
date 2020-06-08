@@ -59,6 +59,19 @@ const onNewToDoNameChange = function (event) {
     update()
 }
 
+const onNewToDoSubmit = function (event) {
+    event.preventDefault()
+
+    tasks = tasks.concat({
+        name: newToDoName,
+        isCompleted: false,
+    })
+
+    newToDoName = ''
+
+    update()
+}
+
 // --------
 
 const renderTask = function (task) {
@@ -108,6 +121,8 @@ const renderNewTaskForm = function () {
     const container = document.createElement('form')
     container.className = 'todo-list__form'
 
+    container.addEventListener('submit', onNewToDoSubmit)
+
     const inputElement = renderNewTaskInput()
     const buttonElement = renderNewTaskButton('ADD')
 
@@ -124,9 +139,6 @@ const render = function () {
     const newTaskFormElement = renderNewTaskForm()
     const taskListElement = renderTasksList(tasks)
 
-    const text = document.createTextNode(newToDoName)
-
-    container.appendChild(text)
     container.appendChild(newTaskFormElement)
     container.appendChild(taskListElement)
 
