@@ -5,7 +5,7 @@ let mainContainer = null
 let filter = 'ALL' // one of ALL, DONE, NOT-DONE
 let sort = 'ASCENDING' // ASCENDING or DESCENDING
 
-let searchPhrase = 'zmyj'
+let searchPhrase = ''
 let searchInputIsFocused = false
 let newToDoName = ''
 let newToDoInputIsFocused = false
@@ -13,6 +13,10 @@ let newToDoInputIsFocused = false
 let tasks = [
     {
         name: 'Wynieś śmieci',
+        isCompleted: true,
+    },
+    {
+        name: 'Ala ma kota',
         isCompleted: true,
     },
     {
@@ -271,10 +275,18 @@ const render = function () {
         .filter(filterByCompleted)
         .filter(filterBySearchPhrase)
 
+    const sortedTasks = filteredTasks
+        .slice()
+        .sort(function(taskA, taskB){
+            if(taskA.name < taskB.name) return -1
+            if(taskA.name > taskB.name) return 1
+            return 0
+        })
+
     const searchElement = renderSearch()
     const filtersElement = renderFilters(filter)
     const newTaskFormElement = renderNewTaskForm()
-    const taskListElement = renderTasksList(filteredTasks)
+    const taskListElement = renderTasksList(sortedTasks)
 
     container.appendChild(searchElement)
     container.appendChild(filtersElement)
