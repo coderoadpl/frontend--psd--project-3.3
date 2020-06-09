@@ -95,6 +95,10 @@ const initToDo = (function () {
         return button
     }
 
+    const generateTimestampId = function(){
+        return Date.now() + '-' + Math.round(Math.random() * 1000000)
+    }
+
     // State changing functions
 
     const onSearchPhraseChange = function (event) {
@@ -148,6 +152,7 @@ const initToDo = (function () {
         tasks = tasks.concat({
             name: newToDoName,
             isCompleted: false,
+            id: generateTimestampId(),
         })
 
         newToDoName = ''
@@ -155,11 +160,12 @@ const initToDo = (function () {
         update()
     }
 
-    const onTaskCompleteToggle = function (indexToToggle) {
-        tasks = tasks.map(function (task, index) {
-            if (index !== indexToToggle) return task
+    const onTaskCompleteToggle = function (idToToggle) {
+        tasks = tasks.map(function (task) {
+            if (task.id !== idToToggle) return task
 
             return {
+                id: task.id,
                 name: task.name,
                 isCompleted: !task.isCompleted,
             }
@@ -168,9 +174,9 @@ const initToDo = (function () {
         update()
     }
 
-    const onTaskDelete = function (indexToDelete) {
-        tasks = tasks.filter(function (task, index) {
-            return index !== indexToDelete
+    const onTaskDelete = function (idToDelete) {
+        tasks = tasks.filter(function (task) {
+            return task.id !== idToDelete
         })
 
         update()
@@ -211,11 +217,11 @@ const initToDo = (function () {
         const container = document.createElement('ol')
         container.className = 'todo-list__list'
 
-        const tasksElements = tasks.map(function (task, index) {
+        const tasksElements = tasks.map(function (task) {
             return renderTask(
                 task,
-                function () { onTaskCompleteToggle(index) },
-                function () { onTaskDelete(index) },
+                function () { onTaskCompleteToggle(task.id) },
+                function () { onTaskDelete(task.id) },
             )
         })
 
