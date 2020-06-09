@@ -10,20 +10,35 @@ let searchInputIsFocused = false
 let newToDoName = ''
 let newToDoInputIsFocused = false
 
-let tasks = [
-    {
-        name: 'Wynieś śmieci',
-        isCompleted: true,
-    },
-    {
-        name: 'Ala ma kota',
-        isCompleted: true,
-    },
-    {
-        name: 'Zmyj naczynia',
-        isCompleted: false,
+let tasks = []
+
+const loadFromLocalStorage = function () {
+    const state = JSON.parse(localStorage.getItem('todo'))
+
+    if (!state) return
+
+    filter = state.filter
+    sort = state.sort
+    searchPhrase = state.searchPhrase
+    searchInputIsFocused = state.searchInputIsFocused
+    newToDoName = state.newToDoName
+    newToDoInputIsFocused = state.newToDoInputIsFocused
+    tasks = state.tasks
+}
+
+const saveToLocaleStorage = function () {
+    const state = {
+        filter: filter,
+        sort: sort,
+        searchPhrase: searchPhrase,
+        searchInputIsFocused: searchInputIsFocused,
+        newToDoName: newToDoName,
+        newToDoInputIsFocused: newToDoInputIsFocused,
+        tasks: tasks,
     }
-]
+
+    localStorage.setItem('todo', JSON.stringify(state))
+}
 
 // Generic / helper functions
 
@@ -349,6 +364,8 @@ const update = function () {
 
     const app = render()
 
+    saveToLocaleStorage()
+
     mainContainer.appendChild(app)
 }
 
@@ -360,6 +377,8 @@ const init = function (selector) {
         console.log('Container do not exist!')
         return
     }
+
+    loadFromLocalStorage()
 
     mainContainer = container
 
