@@ -3,6 +3,7 @@ const crateToDoInit = function () {
     // App state
 
     let mainContainer = null
+    let localStorageKey = ''
 
     let filter = 'ALL' // one of ALL, DONE, NOT-DONE
     let sort = 'NONE' // NONE, ASCENDING or DESCENDING
@@ -15,7 +16,7 @@ const crateToDoInit = function () {
     let tasks = []
 
     const loadFromLocalStorage = function () {
-        const state = JSON.parse(localStorage.getItem('todo'))
+        const state = JSON.parse(localStorage.getItem(localStorageKey))
 
         if (!state) return
 
@@ -39,7 +40,7 @@ const crateToDoInit = function () {
             tasks: tasks,
         }
 
-        localStorage.setItem('todo', JSON.stringify(state))
+        localStorage.setItem(localStorageKey, JSON.stringify(state))
     }
 
     // Generic / helper functions
@@ -377,7 +378,7 @@ const crateToDoInit = function () {
         mainContainer.appendChild(app)
     }
 
-    const init = function (selector) {
+    const init = function (selector, key) {
 
         const container = document.querySelector(selector)
 
@@ -386,9 +387,10 @@ const crateToDoInit = function () {
             return
         }
 
-        loadFromLocalStorage()
-
         mainContainer = container
+        localStorageKey = key
+        
+        loadFromLocalStorage()
 
         const app = render()
 
@@ -397,5 +399,5 @@ const crateToDoInit = function () {
     }
 
     return init
-    
+
 }
