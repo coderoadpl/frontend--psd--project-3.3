@@ -278,9 +278,7 @@ const render = function () {
     const sortedTasks = filteredTasks
         .slice()
         .sort(function(taskA, taskB){
-            if(taskA.name < taskB.name) return -1
-            if(taskA.name > taskB.name) return 1
-            return 0
+           return -(taskA.name.localeCompare(taskB.name))
         })
 
     const searchElement = renderSearch()
