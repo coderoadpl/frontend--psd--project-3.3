@@ -1,4 +1,4 @@
-const initToDo = (function () {
+const crateToDoInit = function () {
 
     // App state
 
@@ -397,7 +397,5 @@ const initToDo = (function () {
     }
 
     return init
-
-})()
-
-initToDo('.root')
+    
+}
